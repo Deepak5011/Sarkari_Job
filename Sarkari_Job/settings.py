@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,12 +20,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ywpqra=b7%zey10n9t8bp76=#wn(h$0c!94^3f5w9c3jovk8=-'
+# Read SECRET_KEY from environment variable
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '^qv=9a*0(pt!sjyc*q_8a8c-dl$upqc+ktk(01o2w*g))n1e)t') # Add a default for safety, but ensure the env var is set in production
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# SECURITY WARNING: Don't run with debug turned on in production!
+# Read DEBUG status from environment variable (e.g., 'False' or '0' in production)
+DEBUG = os.environ.get('DJANGO_DEBUG', 'false') # Add a default for safety, but ensure the env var is set in production== 'True'
 
-ALLOWED_HOSTS = []
+# Read ALLOWED_HOSTS from environment variable (comma-separated string)
+# Example: 'your_domain.com,13.53.106.122'
+allowed_hosts_str = os.environ.get('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost,13.53.106.122') # Add server IP as default
+ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_str.split(',')]
 
 
 # Application definition
@@ -73,12 +78,20 @@ WSGI_APPLICATION = 'Sarkari_Job.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        # Read database credentials from environment variables
+        'NAME': os.environ.get('DB_NAME', 'sarkari_job_db'),
+        'USER': os.environ.get('DB_USER', 'sarkari_job_user'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'postgres'), # Use the password you set earlier
+        'HOST': os.environ.get('DB_HOST', 'localhost'), # Usually localhost if DB is on the same server
+        'PORT': os.environ.get('DB_PORT', '5432'),
+        'OPTIONS': {
+            'client_encoding': 'UTF8'
+        }
     }
 }
 
@@ -127,9 +140,9 @@ STATICFILES_DIRS = [
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Login/Logout URLs
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'dashboard'
-LOGOUT_REDIRECT_URL = 'home'
+LOGIN_URL = 'jobs:login'
+LOGIN_REDIRECT_URL = 'jobs:dashboard'
+LOGOUT_REDIRECT_URL = 'jobs:home'
 
 # Email settings (update these with your email settings)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
