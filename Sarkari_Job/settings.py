@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Read SECRET_KEY from environment variable
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '^qv=9a*0(pt!sjyc*q_8a8c-dl$upqc+ktk(01o2w*g))n1e)t') # Add a default for safety, but ensure the env var is set in production
 
-# SECURITY WARNING: Don't run with debug turned on in production!
+# SECURITY WARNING: don't run with debug turned on in production!
 # Read DEBUG status from environment variable (e.g., 'False' or '0' in production)
 DEBUG = os.environ.get('DJANGO_DEBUG', 'false') # Add a default for safety, but ensure the env var is set in production== 'True'
 
@@ -85,8 +85,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         # Read database credentials from environment variables
         'NAME': os.environ.get('DB_NAME', 'sarkari_job_db'),
-        'USER': os.environ.get('DB_USER', 'sarkari_job_user'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'postgres'), # Use the password you set earlier
+        'USER': os.environ.get('DB_USER', 'sarkari_user'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'Depak29896#'), # Use the password you set earlier
         'HOST': os.environ.get('DB_HOST', 'localhost'), # Usually localhost if DB is on the same server
         'PORT': os.environ.get('DB_PORT', '5432'),
         'OPTIONS': {
